@@ -2,6 +2,7 @@ import pickle
 import streamlit as st
 import requests
 import pandas as pd
+
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
     data = requests.get(url)
@@ -26,6 +27,27 @@ def recommend(movie):
 st.header('Movie Recommender System')
 movies= pd.read_csv('./research/new_df.csv')
 similarity = pickle.load(open('./research/similarity.pkl','rb'))
+
+# Select random values from column 'movie_id'
+random_values = movies['movie_id'].sample(n=5)
+
+random_posters= []
+# display the movie
+for i in random_values:
+    random_posters.append(fetch_poster(i))
+poster1, poster2, poster3, poster4, poster5 = st.columns(5)
+with poster1:
+    st.image(random_posters[0])
+with poster2:
+    st.image(random_posters[1])
+
+with poster3:
+    st.image(random_posters[2])
+with poster4:
+    st.image(random_posters[3])
+with poster5:
+    st.image(random_posters[4])
+
 
 movie_title = movies['title'].values
 selected_movie = st.selectbox(
